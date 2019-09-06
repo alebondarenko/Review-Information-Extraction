@@ -29,6 +29,7 @@ flags.DEFINE_integer('max_max_epoch', 50, 'No. of times the LSTM cell state and 
 flags.DEFINE_integer('step', 121, 'checkpoint step for reporting results')
 flags = flags.FLAGS
 
+## comment
 
 def readfile(filename):
 	data = list()
