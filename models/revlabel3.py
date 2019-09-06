@@ -7,7 +7,7 @@ import numpy as np
 import codecs
 import os
 
-np.set_printoptions(threshold=np.nan)
+np.set_printoptions(threshold=None)
 
 flags = tf.flags
 flags.DEFINE_string('trainfile', '../datasets/data1/trainset.txt', 'Directory containing training data')
@@ -16,17 +16,17 @@ flags.DEFINE_string('vocabword_path', '../datasets/data1/vocabword.txt', 'Word v
 flags.DEFINE_string('vocabpos_path', '../datasets/data1/vocabpos.txt', 'POS vocabulary file')
 flags.DEFINE_string('vocabattr_path', '../datasets/data1/vocabattr.txt', 'Attribute vocabulary file')
 flags.DEFINE_string('wemb_path', '../datasets/data1/wordemb-text8-300.npy', 'Embeddings file')
-flags.DEFINE_string('batchsize', 500, 'Mini-batch Size')
-flags.DEFINE_string('numsteps', 30, 'Number of steps of recurrence (size of context window ie. how many words from the history to depend on)')
-flags.DEFINE_string('numlayers', 1, 'Number of LSTM Layers')
-flags.DEFINE_string('pembdim', 12, 'POS embeddings dimension')
-flags.DEFINE_string('wembdim', 300, 'Word embeddings dimension')
-flags.DEFINE_string('aembdim', 5, 'Attribute embedding dimension')
-flags.DEFINE_string('decay', 0.5, '')
-flags.DEFINE_string('learning_rate', 1.0, '')
-flags.DEFINE_string('max_norm', 5, 'Max Norm of gradient after which it will be clipped')
-flags.DEFINE_string('max_max_epoch', 50, 'No. of times the LSTM cell state and value are reinitialized and trained on a stream of input')
-flags.DEFINE_string('step', 11, 'checkpoint step for reporting results')
+flags.DEFINE_integer('batchsize', 500, 'Mini-batch Size')
+flags.DEFINE_integer('numsteps', 30, 'Number of steps of recurrence (size of context window ie. how many words from the history to depend on)')
+flags.DEFINE_integer('numlayers', 1, 'Number of LSTM Layers')
+flags.DEFINE_integer('pembdim', 12, 'POS embeddings dimension')
+flags.DEFINE_integer('wembdim', 300, 'Word embeddings dimension')
+flags.DEFINE_integer('aembdim', 5, 'Attribute embedding dimension')
+flags.DEFINE_float('decay', 0.5, '')
+flags.DEFINE_float('learning_rate', 1.0, '')
+flags.DEFINE_integer('max_norm', 5, 'Max Norm of gradient after which it will be clipped')
+flags.DEFINE_integer('max_max_epoch', 50, 'No. of times the LSTM cell state and value are reinitialized and trained on a stream of input')
+flags.DEFINE_integer('step', 121, 'checkpoint step for reporting results')
 flags = flags.FLAGS
 
 
@@ -176,6 +176,8 @@ def runepoch(sess, data, modeldict, fetches, epoch_no, verbose, record):
 
 
 def train(traindata):
+	# gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
+	# with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	with tf.Session() as sess:
 		m_train = makemodel(True)
 		print('Model Creation Done')
@@ -224,7 +226,7 @@ def main():
 	traindata, testdata = readdata()
 	print('Traindata Shape: ', traindata.shape)
 	print('Testdata Shape: ', testdata.shape)
-	# train(traindata)
+	#train(traindata)
 	test(testdata)
 
 
